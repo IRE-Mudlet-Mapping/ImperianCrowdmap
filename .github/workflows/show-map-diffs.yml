@@ -1,0 +1,44 @@
+name: Map diffs
+
+on: [pull_request_target]
+
+jobs:
+  check-env:
+    runs-on: ubuntu-latest
+    outputs:
+      cloudinary_name: ${{ steps.cloudinary_name.outputs.defined }}
+    steps:
+      - id: cloudinary_name
+        env:
+          CLOUDINARY_NAME: ${{ secrets.CLOUDINARY_NAME }}
+        if: "${{ env.CLOUDINARY_NAME != '' }}"
+        run: echo "::set-output name=defined::true"
+  map-diff:
+    runs-on: ubuntu-latest
+    needs: [check-env]
+    if: needs.check-env.outputs.cloudinary_name == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+          fetch-depth: 0
+
+      - name: Check if the map was changed in this PR
+        id: map-change-detected
+        uses: tj-actions/changed-files@v11
+        with:
+          # the only source of truth is the actual map
+          files: Map/map
+          sha: ${{github.event.pull_request.head.ref}}
+
+      - name: Create map diffs
+        if: steps.map-change-detected.outputs.any_changed == 'true'
+        uses: Delwing/mudlet-map-diff-action@v2
+        with:
+          old-map: Map/map
+        env:
+          CLOUDINARY_NAME: ${{ secrets.CLOUDINARY_NAME }}
+          CLOUDINARY_KEY: ${{ secrets.CLOUDINARY_KEY }}
+          CLOUDINARY_SECRET: ${{ secrets.CLOUDINARY_SECRET }}
