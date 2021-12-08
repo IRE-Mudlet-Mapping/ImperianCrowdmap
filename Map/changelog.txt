@@ -1,7 +1,3 @@
 changelog = {
-          [[Initial Release.]],
-          [[Nirvana.]],
-          [[inside an enormous pumpkin.]],
-          [[Ancient Barrows.]],
-          [[the Hidden Graveyard.]],
+          [[Initial Release: Nirvana, inside an enormous pumpkin, Ancient Barrows, the Hidden Graveyard]],
 }
