@@ -2,6 +2,10 @@ name: Map diffs
 
 on: [pull_request_target]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   check-env:
     runs-on: ubuntu-latest
@@ -12,26 +16,29 @@ jobs:
         env:
           CLOUDINARY_NAME: ${{ secrets.CLOUDINARY_NAME }}
         if: "${{ env.CLOUDINARY_NAME != '' }}"
-        run: echo "::set-output name=defined::true"
+        run: echo "defined=true" >> "$GITHUB_OUTPUT"
   map-diff:
     runs-on: ubuntu-latest
     needs: [check-env]
     if: needs.check-env.outputs.cloudinary_name == 'true'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout base
+        uses: actions/checkout@v6
         with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
           fetch-depth: 0
+      - name: Fetch PR head
+        run: |
+          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-head
+          git checkout pr-head
 
       - name: Check if the map was changed in this PR
         id: map-change-detected
-        uses: tj-actions/changed-files@v11
+        uses: tj-actions/changed-files@v47.0.4
         with:
           # the only source of truth is the actual map
           files: Map/map
-          sha: ${{github.event.pull_request.head.ref}}
+          sha: ${{github.event.pull_request.head.sha}}
+          base_sha: ${{github.event.pull_request.base.sha}}
 
       - name: Create map diffs
         if: steps.map-change-detected.outputs.any_changed == 'true'
