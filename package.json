@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "danger:local": "git fetch https://github.com/IRE-Mudlet-Mapping/ImperianCrowdmap.git development:refs/remotes/upstream/development && danger local --base upstream/development --dangerfile danger/dangerfile.ts --text-only --failOnErrors",
+    "test": "node --test danger/tests/rules.test.ts",
+    "typecheck": "tsc -p tsconfig.typecheck.json"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash": "^4.17.25",
+    "@types/node": "^26.6.2",
+    "@types/yargs": "^17.0.35",
+    "danger": "^14.0.7",
+    "js-yaml": "^5.4.2",
+    "lodash": "^4.18.1",
+    "mudlet-map-binary-reader": "^2.0.0",
+    "typescript": "^6.0.3",
+    "yargs": "^18.1.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
