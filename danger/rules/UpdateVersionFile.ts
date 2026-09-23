@@ -1,5 +1,5 @@
-//import { DangerDSLType } from "danger";
-import { MapChangeRule } from "../classes/Rule";
+import type { DangerDSLType } from "danger";
+import { MapChangeRule } from "../classes/Rule.ts";
 
 const versionFilePath = "Map/version.txt";
 
@@ -10,10 +10,7 @@ export const updateVersionFile = new MapChangeRule(
             return false;
         }
         const versionFileDiff = await danger.git.diffForFile(versionFilePath);
-        if (parseInt(versionFileDiff.before) + 1 != parseInt(versionFileDiff.after)) {
-            return false;
-        }
-        return true;
+        return parseInt(versionFileDiff.before) + 1 === parseInt(versionFileDiff.after);
     },
     "Updated `version.txt` by 1."
 );
