@@ -68,6 +68,12 @@ jobs:
             exit 1
           fi
 
+      - name: Approve validated dependency update
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: https://github.com/${{ github.repository }}/pull/${{ steps.pr.outputs.number }}
+        run: gh pr review --approve "$PR_URL"
+
       - name: Enable squash auto-merge
         env:
           GH_TOKEN: ${{ github.token }}
