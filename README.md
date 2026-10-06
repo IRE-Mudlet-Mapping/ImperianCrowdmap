@@ -40,6 +40,8 @@ For the initial migration, update the default-branch ruleset in this order:
 The initial migration PR runs trusted `pull_request_target` workflows from its
 base branch, so it cannot report `validate / danger` yet.
 
-Dependabot ignores major platform upgrades. A move from `@v1` to `@v2` requires
-manual review and end-to-end validation rather than automatic approval/merge.
+Dependabot opens PRs for major platform upgrades so maintainers receive notice.
+The shared automation approves and enables auto-merge only for validated minor
+and patch updates; major or unknown update types require manual review. A move
+from `@v1` to `@v2` requires manual review and end-to-end validation.
 Manual publication is also restricted by the shared workflow to `development`.
