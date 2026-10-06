@@ -29,7 +29,17 @@ Dependabot watches this repository's GitHub Actions references.
 - Required checks for the platform callers: `validate / danger` and
   `validate / validate`. Keep the existing review requirement.
 
-When migrating the default-branch ruleset, replace the legacy required checks
-`danger` and `check` with the names above after the new checks are available.
-The initial migration PR still runs trusted `pull_request_target` workflows
-from its base branch; a subsequent map PR exercises the migrated workflows.
+For the initial migration, update the default-branch ruleset in this order:
+
+1. Before merging, replace `check` with `validate / validate`, which already
+   runs on this migration PR. Keep `danger` required and keep the review requirement.
+2. Merge the migration after review and successful checks.
+3. Open a subsequent map PR against the migrated base. Once its new Danger
+   check is available, replace `danger` with `validate / danger` in the ruleset.
+
+The initial migration PR runs trusted `pull_request_target` workflows from its
+base branch, so it cannot report `validate / danger` yet.
+
+Dependabot ignores major platform upgrades. A move from `@v1` to `@v2` requires
+manual review and end-to-end validation rather than automatic approval/merge.
+Manual publication is also restricted by the shared workflow to `development`.

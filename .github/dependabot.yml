@@ -5,3 +5,6 @@ updates:
     target-branch: "development"
     schedule:
       interval: "daily"
+    ignore:
+      - dependency-name: "IRE-Mudlet-Mapping/CrowdmapPlatform*"
+        update-types: ["version-update:semver-major"]
