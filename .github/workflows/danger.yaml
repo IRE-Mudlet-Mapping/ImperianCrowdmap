@@ -1,4 +1,4 @@
-name: DangerJS
+name: Validate map pull request
 
 on: pull_request_target
 
@@ -7,21 +7,5 @@ permissions:
   pull-requests: write
 
 jobs:
-  danger:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v7
-      with:
-        fetch-depth: 1
-    - name: Fetch PR map file for validation
-      run: |
-        git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-head
-        git checkout pr-head -- Map/map || true
-    - name: Use Node.js
-      uses: actions/setup-node@v7.0.0
-    - name: Install yarn dependencies
-      run: |
-        yarn install --frozen-lockfile
-        yarn danger ci -d danger/dangerfile.ts
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  validate:
+    uses: IRE-Mudlet-Mapping/CrowdmapPlatform/.github/workflows/danger.yml@v1

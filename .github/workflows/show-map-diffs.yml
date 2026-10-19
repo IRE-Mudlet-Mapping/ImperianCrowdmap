@@ -1,41 +1,12 @@
-name: Map diffs
+name: Visual map diff
 
-on: [pull_request_target]
+on: pull_request_target
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  map-diff:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout base
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - name: Fetch PR head
-        run: |
-          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-head
-          git checkout pr-head
-
-      - name: Check if the map was changed in this PR
-        id: map-change-detected
-        uses: tj-actions/changed-files@v47.0.6
-        with:
-          # the only source of truth is the actual map
-          files: Map/map
-          sha: ${{github.event.pull_request.head.sha}}
-          base_sha: ${{github.event.pull_request.base.sha}}
-
-      - name: Create map diffs
-        if: steps.map-change-detected.outputs.any_changed == 'true'
-        uses: Delwing/mudlet-map-diff-action@details-tag-fix
-        with:
-          old-map: Map/map
-          reuse-comment: true
-          collapse-diff: true
-        env:
-          CLOUDINARY_NAME: ${{ secrets.CLOUDINARY_NAME }}
-          CLOUDINARY_KEY: ${{ secrets.CLOUDINARY_KEY }}
-          CLOUDINARY_SECRET: ${{ secrets.CLOUDINARY_SECRET }}
+  diff:
+    uses: IRE-Mudlet-Mapping/CrowdmapPlatform/.github/workflows/show-map-diffs.yml@v1
+    secrets: inherit

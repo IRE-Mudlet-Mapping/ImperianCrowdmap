@@ -1,6 +1,0 @@
-export * from "./UpdateVersionFile.ts"
-export * from "./UpdateChangelog.ts"
-export { disallowLockedAreas } from "./DisallowLockedAreas.ts"
-export * from "./CorrectBranch.ts"
-export * from "./UpdateMainMapFile.ts"
-export * from "./WarnDangerChangesWithoutTests.ts"

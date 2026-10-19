@@ -1,0 +1,10 @@
+{
+  "game": {
+    "id": "imperian",
+    "title": "The Imperian Map"
+  },
+  "map": {
+    "source": "Map/map"
+  },
+  "plugins": []
+}
